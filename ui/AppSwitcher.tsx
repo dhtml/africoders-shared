@@ -47,6 +47,7 @@ const colorMap: Record<string, { bg: string; text: string }> = {
   "promptgist":  { bg: "bg-purple-100 dark:bg-purple-500/15",   text: "text-purple-600 dark:text-purple-400" },
   "spaces":      { bg: "bg-teal-100 dark:bg-teal-500/15",       text: "text-teal-600 dark:text-teal-400" },
   "portal":      { bg: "bg-violet-100 dark:bg-violet-500/15",   text: "text-violet-600 dark:text-violet-400" },
+  "observe":     { bg: "bg-cyan-100 dark:bg-cyan-500/15",        text: "text-cyan-600 dark:text-cyan-400" },
 };
 
 const defaultProducts: Product[] = [
@@ -60,6 +61,7 @@ const defaultProducts: Product[] = [
   { name: "PromptGist",    slug: "promptgist",    domain: "promptgist.africoders.com", icon: "sparkles" },
   { name: "Spaces",        slug: "spaces",        domain: "spaces.africoders.com",     icon: "users" },
   { name: "Portal",        slug: "portal",        domain: "portal.africoders.com",     icon: "globe" },
+  { name: "Observe",       slug: "observe",       domain: "observe.africoders.com",    icon: "activity" },
 ];
 
 export function AppSwitcher() {
