@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "../utils/cn";
-import { getUrl } from "../utils/domains";
+import { getDomain, getUrl } from "../utils/domains";
 import { useAuth } from "../hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
 
