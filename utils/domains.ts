@@ -29,6 +29,7 @@ const domainMap: Record<Env, Record<string, string>> = {
     portal: "portal.africoders.local",
     api: "api.africoders.local",
     identity: "identity.africoders.local",
+    observe: "observe.africoders.local",
   },
   production: {
     africoders: "africoders.com",
@@ -43,6 +44,7 @@ const domainMap: Record<Env, Record<string, string>> = {
     portal: "portal.africoders.com",
     api: "api.africoders.com",
     identity: "identity.africoders.com",
+    observe: "observe.africoders.com",
   },
 };
 
