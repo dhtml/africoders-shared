@@ -42,7 +42,8 @@ export function Navbar({ appName, appIcon, links = [], showSearch = true, accent
     if (sessionStorage.getItem(flag)) return;
     sessionStorage.setItem(flag, "1");
     const currentUrl = window.location.href;
-    window.location.href = `${getUrl("identity")}/login?redirect_url=${encodeURIComponent(currentUrl)}&silent=1`;
+    const identityBase = process.env.NEXT_PUBLIC_IDENTITY_URL || getUrl("identity");
+    window.location.href = `${identityBase}/login?redirect_url=${encodeURIComponent(currentUrl)}&silent=1`;
   }, [authLoading, isAuthenticated, pathname]);
 
   // Close user menu on outside click

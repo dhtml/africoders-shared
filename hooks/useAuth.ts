@@ -4,7 +4,11 @@ import { useState, useEffect, useCallback, useRef, createContext, useContext, cr
 import type { User, AuthResponse } from "../types";
 import { getUrl } from "../utils/domains";
 
-const API_BASE = getUrl("api");
+/** Resolve API base lazily — ensures window.location is available on the client
+ *  and avoids baking a .local domain during SSR/build. */
+function getApiBase(): string {
+  return process.env.NEXT_PUBLIC_API_URL || getUrl("api");
+}
 
 // ── Cookie-based auth: tokens live in HttpOnly cookies set by the server ──
 // The browser sends them automatically with credentials: "include".
@@ -64,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (refreshTimer.current) clearTimeout(refreshTimer.current);
     refreshTimer.current = setTimeout(async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
+        const res = await fetch(`${getApiBase()}/api/v1/auth/refresh`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -95,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Still try /auth/me once in case there's an HttpOnly cookie
       // but the JS flag was cleared (e.g. user just logged in from another subdomain)
       try {
-        const res = await fetch(`${API_BASE}/api/v1/auth/me`, {
+        const res = await fetch(`${getApiBase()}/api/v1/auth/me`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -117,7 +121,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // We have the flag — validate the session
     try {
-      const res = await fetch(`${API_BASE}/api/v1/auth/me`, {
+      const res = await fetch(`${getApiBase()}/api/v1/auth/me`, {
         credentials: "include",
       });
       if (res.ok) {
@@ -128,7 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else if (res.status === 401) {
         // Access token expired, try refresh (cookie-based)
         try {
-          const refreshRes = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
+          const refreshRes = await fetch(`${getApiBase()}/api/v1/auth/refresh`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -171,7 +175,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (loginId: string, password: string, turnstileToken?: string): Promise<AuthResponse> => {
     setError(null);
-    const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+    const res = await fetch(`${getApiBase()}/api/v1/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -187,7 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (name: string, email: string, password: string, username?: string, turnstileToken?: string): Promise<AuthResponse> => {
     setError(null);
-    const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
+    const res = await fetch(`${getApiBase()}/api/v1/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -204,7 +208,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = async () => {
     if (refreshTimer.current) clearTimeout(refreshTimer.current);
     try {
-      await fetch(`${API_BASE}/api/v1/auth/logout`, {
+      await fetch(`${getApiBase()}/api/v1/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -219,7 +223,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logoutAll = async () => {
     if (refreshTimer.current) clearTimeout(refreshTimer.current);
     try {
-      await fetch(`${API_BASE}/api/v1/auth/logout/all`, {
+      await fetch(`${getApiBase()}/api/v1/auth/logout/all`, {
         method: "POST",
         credentials: "include",
       });
@@ -232,7 +236,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const socialLogin = (provider: string, redirectUrl?: string) => {
-    let url = `${API_BASE}/api/v1/auth/${provider}`;
+    let url = `${getApiBase()}/api/v1/auth/${provider}`;
     if (redirectUrl) {
       url += `?redirect_url=${encodeURIComponent(redirectUrl)}`;
     }
