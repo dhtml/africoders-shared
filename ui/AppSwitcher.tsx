@@ -50,22 +50,24 @@ const colorMap: Record<string, { bg: string; text: string }> = {
   "observe":     { bg: "bg-cyan-100 dark:bg-cyan-500/15",        text: "text-cyan-600 dark:text-cyan-400" },
 };
 
-const defaultProducts: Product[] = [
-  { name: "Africoders",    slug: "africoders",    domain: "africoders.com",            icon: "braces" },
-  { name: "Console",       slug: "console",       domain: "console.africoders.com",    icon: "monitor-dot" },
-  { name: "Academy",       slug: "academy",       domain: "academy.africoders.com",    icon: "graduation-cap" },
-  { name: "Jobs",          slug: "jobs",          domain: "jobs.africoders.com",        icon: "briefcase" },
-  { name: "Noccea",        slug: "noccea",        domain: "noccea.africoders.com",     icon: "building-2" },
-  { name: "KortexTools",   slug: "kortextools",   domain: "tools.africoders.com",      icon: "wrench" },
-  { name: "AfriHealthSys", slug: "afrihealthsys", domain: "health.africoders.com",     icon: "heart-pulse" },
-  { name: "PromptGist",    slug: "promptgist",    domain: "promptgist.africoders.com", icon: "sparkles" },
-  { name: "Spaces",        slug: "spaces",        domain: "spaces.africoders.com",     icon: "users" },
-  { name: "Portal",        slug: "portal",        domain: "portal.africoders.com",     icon: "globe" },
-  { name: "Observe",       slug: "observe",       domain: "observe.africoders.com",    icon: "activity" },
+const defaultProducts: Omit<Product, "domain">[] = [
+  { name: "Africoders",    slug: "africoders",    icon: "braces" },
+  { name: "Console",       slug: "console",       icon: "monitor-dot" },
+  { name: "Academy",       slug: "academy",       icon: "graduation-cap" },
+  { name: "Jobs",          slug: "jobs",          icon: "briefcase" },
+  { name: "Noccea",        slug: "noccea",        icon: "building-2" },
+  { name: "KortexTools",   slug: "kortextools",   icon: "wrench" },
+  { name: "AfriHealthSys", slug: "afrihealthsys", icon: "heart-pulse" },
+  { name: "PromptGist",    slug: "promptgist",    icon: "sparkles" },
+  { name: "Spaces",        slug: "spaces",        icon: "users" },
+  { name: "Portal",        slug: "portal",        icon: "globe" },
+  { name: "Observe",       slug: "observe",       icon: "activity" },
 ];
 
 export function AppSwitcher() {
-  const [products] = useState<Product[]>(defaultProducts);
+  const [products] = useState<Product[]>(() =>
+    defaultProducts.map((p) => ({ ...p, domain: getDomain(p.slug) }))
+  );
   const [open, setOpen] = useState(false);
   const [switchingTo, setSwitchingTo] = useState<string | null>(null);
   const { resolvedTheme } = useTheme();
