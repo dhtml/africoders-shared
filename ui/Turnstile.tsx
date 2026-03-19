@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { getEnv } from "../utils/domains";
 
 declare global {
   interface Window {
@@ -80,6 +81,6 @@ export function Turnstile({ siteKey, onVerify, onExpire, className }: TurnstileP
 // Hook to check if Turnstile should be enabled
 export function useTurnstile() {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAACmfMrbtsbDNtsNI";
-  const enabled = !!siteKey;
+  const enabled = getEnv() !== "local" && !!siteKey;
   return { siteKey, enabled };
 }
